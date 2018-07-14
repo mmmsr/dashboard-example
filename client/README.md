@@ -1,3 +1,6 @@
-# Quasar App
+# Client side
 
-> WIP
+How to setup:
+```
+npm install
+```
