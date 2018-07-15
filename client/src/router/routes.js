@@ -20,6 +20,7 @@ export default [
     children: [
       { path: 'inquiries', component: () => import('pages/main/inquiry-list') },
       { path: 'chart01', component: () => import('pages/main/chart01') },
+      { path: 'search', component: () => import('pages/main/search') },
       { path: 'plan/edit', component: () => import('pages/main/plan-edit') },
       { path: 'password-change', component: () => import('pages/auth/password-change') }
     ]
