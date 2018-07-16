@@ -1,28 +1,12 @@
 <template>
-  <!-- <div
-    style="
-    width: 500px;
-    max-width: 100vw;
-    ">
-    class="flex flex-center"
-  </div> -->
   <q-page
     class="layout-padding docs-input -row justify-center">
     <div
       style="width: 500px; max-width: 90vw;">
-      <!-- <q-input
-      v-model="keyword"
-        @change="onChange"
-        autocomplete="off"
-        color="secondary"
-        type="text"
-        float-label="Keyword">
-      </q-input> -->
-
+      <!-- :debounce="600" -->
       <q-search
         v-model="keyword"
         @input="onInput()"
-        :debounce="600"
         placeholder="keyword"
         icon="search"
         float-label="Input keyword">
@@ -33,81 +17,91 @@
       </q-search>
       <br>
     </div>
-
+    <q-card
+      v-if="!hasResult"
+      flat
+      style="max-width: 700px">
+      <q-item>
+        <q-item-side icon="error_outline">
+        </q-item-side>
+        <q-item-main
+          label="No Results"
+          sublabel="There are no results to show">
+        </q-item-main>
+      </q-item>
+    </q-card>
     <div
+      v-if="hasResult"
       v-for="(tweet, index) in tweets"
       v-bind:key="index">
       <q-card
         flat
         style="max-width: 700px">
-        <q-card-title>
-          {{ tweet._source.text }}
-          <span slot="subtitle">{{ tweet._source.name }}</span>
-        </q-card-title>
-        <!-- <q-card-main>
-        </q-card-main> -->
-      </q-card>
-      <!-- <br> -->
-    </div>
+        <q-item
+          highlight
+          @click.native="onClickTweet(tweet._source.screen_name, tweet._source.tweet_id)"
+          >
+          <q-item-side
+            :avatar="`${tweet._source.profile_image_url_https}`"
+            >
+            <!-- :avatar="imgURL(tweet)" -->
+          </q-item-side>
 
+          <q-item-main>
+            <q-item-tile label>
+              <text-highlight :queries="keyword">
+                {{ tweet._source.text }}
+              </text-highlight>
+            </q-item-tile>
+
+            <q-item-tile sublabel>
+              <text-highlight :queries="keyword">
+                {{ tweet._source.name }}
+              </text-highlight>
+            </q-item-tile>
+
+          </q-item-main>
+          <q-item-side right :stamp="`score: ${tweet._score}`" />
+        </q-item>
+        <q-card-separator />
+      </q-card>
+    </div>
   </q-page>
 </template>
 
 <script>
-import { required, email } from 'vuelidate/lib/validators'
-import HorizontalBarChart from './horizontal-bar-chart'
 import axios from 'axios'
-// import LineChart from './LineChart.js'
+import { openURL } from 'quasar'
 
 export default {
-  components: {
-    HorizontalBarChart
-  },
   data () {
     return {
       tweets: [],
       keyword: '',
-      revenue1: 0,
-      revenue2: 0,
-      cost1: 0,
-      cost2: 0,
-      rate1: 0,
-      rate2: 0,
-      rate3: 0,
-      rate4: 0,
-      term: 12,
-      // number: 0,
-      datacollection: null,
-      datacollection2: null,
-      options2: null,
       isLoading: false,
-      email: '',
-      password: ''
+      hasResult: false
     }
-  },
-  validations: {
-    email: { required, email }
   },
   methods: {
     onInput () {
-      console.log('onInput')
-      console.log(this.keyword)
       if (this.keyword === '') {
+        this.tweets = []
+        this.hasResult = false
         return
       }
       this.search(this.keyword)
     },
-
     search: function (keyword) {
       let data = new FormData()
       this.isLoading = true
       this.hasResult = false
       this.fetchResult(data, keyword).then((tweets) => {
+        this.tweets = []
         if (tweets && tweets.length > 0) {
-          // console.log('OK!')
           // console.log(tweets)
           this.hasResult = true
         } else {
+          // console.log('no result')
           this.hasResult = false
         }
         this.tweets = tweets
@@ -115,7 +109,7 @@ export default {
       })
     },
     fetchResult: function (data, keyword) {
-      const url = `${process.env.ES_API_URL}/test2`
+      const url = `${process.env.ES_API_URL}/api/search`
       let formdata = {
         keyword: keyword
       }
@@ -130,7 +124,23 @@ export default {
             'Content-Type': 'application/json'
           }
         }
-      ).then(response => response.data)
+      ).then(
+        response => response.data
+      ).catch(
+        error => {
+          console.log(error)
+          this.$q.notify({
+            icon: 'warning',
+            color: 'negative',
+            message: `Server not running`,
+            detail: 'Please contact developer',
+            position: 'top-right' // 'top', 'left', 'bottom-left' etc
+          })
+        }
+      )
+    },
+    onClickTweet (screenName, tweetId) {
+      openURL(`https://twitter.com/${screenName}/status/${tweetId}`)
     }
   },
   created () {
@@ -139,6 +149,9 @@ export default {
 </script>
 
 <style>
+a {
+  text-decoration: none;
+}
 .small {
   max-width: 600px;
   margin:  150px auto;

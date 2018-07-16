@@ -6,6 +6,7 @@ module.exports = function (ctx) {
     plugins: [
       'i18n',
       'axios',
+      'vue-text-highlight',
       'vuelidate'
     ],
     css: [

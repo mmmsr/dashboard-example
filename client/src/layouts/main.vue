@@ -41,6 +41,10 @@
         <q-item-side icon="show_chart" />
         <q-item-main label="Chart Examples" />
       </q-item>
+      <q-item to="search">
+        <q-item-side icon="search" />
+        <q-item-main label="Search Examples" />
+      </q-item>
       <!-- <q-item to="emailchange">
         <q-item-side icon="account box" />
         <q-item-main label="Email Change" />
