@@ -18,7 +18,7 @@
       <br>
     </div>
     <q-card
-      v-if="!hasResult"
+      v-if="!hasResult && !isLoading"
       flat
       style="max-width: 700px">
       <q-item>

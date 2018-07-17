@@ -45,6 +45,12 @@
         <q-item-side icon="search" />
         <q-item-main label="Search Examples" />
       </q-item>
+
+      <q-item @click.native="launch('https://github.com/mmmsr/dashboard-example')">
+        <q-item-side icon="ion-logo-github" />
+        <q-item-main label="Source Code" />
+      </q-item>
+
       <!-- <q-item to="emailchange">
         <q-item-side icon="account box" />
         <q-item-main label="Email Change" />
@@ -85,6 +91,7 @@
 <script>
 
 import { mapGetters, mapActions } from 'vuex'
+import { openURL } from 'quasar'
 
 export default {
   name: 'index',
@@ -105,7 +112,9 @@ export default {
     ...mapActions('auth', [
       'logout', ''
     ]),
-
+    launch (url) {
+      openURL(url)
+    },
     onLogout: function () {
       console.log('onLogout')
       let self = this
