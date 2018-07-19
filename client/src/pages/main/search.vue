@@ -49,15 +49,15 @@
 
           <q-item-main>
             <q-item-tile label>
-              <text-highlight :queries="keyword">
+              <!-- <text-highlight :queries="keyword"> -->
                 {{ tweet._source.text }}
-              </text-highlight>
+              <!-- </text-highlight> -->
             </q-item-tile>
 
             <q-item-tile sublabel>
-              <text-highlight :queries="keyword">
+              <!-- <text-highlight :queries="keyword"> -->
                 {{ tweet._source.name }}
-              </text-highlight>
+              <!-- </text-highlight> -->
             </q-item-tile>
 
           </q-item-main>

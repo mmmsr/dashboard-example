@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <q-layout
     class="login-bg"
     :class="randomBg"
@@ -93,4 +93,4 @@ export default {
 .fade-enter, .fade-leave-to
   opacity 0
 
-</style>
+</style> -->

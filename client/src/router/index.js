@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import routes from './routes'
-import Auth from '../store/modules/auth'
+// import Auth from '../store/modules/auth'
 
 Vue.use(VueRouter)
 
@@ -21,13 +21,13 @@ const Router = new VueRouter({
   scrollBehavior: () => ({ y: 0 }),
   routes
 })
-Router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth) && !Auth.state.loggedIn) {
-    next({
-      path: '/login'
-    })
-  } else {
-    next()
-  }
-})
+// Router.beforeEach((to, from, next) => {
+//   if (to.matched.some(record => record.meta.requiresAuth) && !Auth.state.loggedIn) {
+//     next({
+//       path: '/login'
+//     })
+//   } else {
+//     next()
+//   }
+// })
 export default Router

@@ -32,16 +32,16 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+// import { mapGetters } from 'vuex'
 import {
   makeDateDisplayStr,
   makeTimeDisplayStr
 } from '../../utils/calendar-util'
 
 export default {
-  computed: mapGetters({
-    inquiries: 'allInquiries'
-  }),
+  // computed: mapGetters({
+  //   inquiries: 'allInquiries'
+  // }),
   methods: {
     displayDatetime: function (datetime) {
       return makeDateDisplayStr(datetime) + makeTimeDisplayStr(datetime)
@@ -49,10 +49,10 @@ export default {
   },
   created () {
     let self = this
-    this.$store.dispatch('getAllInquiries', {
-      accessToken: this.$store.getters.accessToken,
-      router: self.$router
-    })
+    // this.$store.dispatch('getAllInquiries', {
+    //   accessToken: this.$store.getters.accessToken,
+    //   router: self.$router
+    // })
   }
 }
 </script>

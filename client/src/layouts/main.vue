@@ -55,18 +55,18 @@
         <q-item-side icon="account box" />
         <q-item-main label="Email Change" />
       </q-item> -->
-      <q-item to="password-change">
+      <!-- <q-item to="password-change">
         <q-item-side icon="account box" />
         <q-item-main label="Password Change" />
-      </q-item>
+      </q-item> -->
       <!-- <q-item @click="onSecretAccess">
         <q-item-side icon="chat" />
         <q-item-main label="SecretAccess" />
       </q-item> -->
-      <q-item @click.native="onLogout">
+      <!-- <q-item @click.native="onLogout">
         <q-item-side icon="exit to app" />
         <q-item-main label="Logout" />
-      </q-item>
+      </q-item> -->
     </q-list>
   </q-layout-drawer>
     <!-- <div slot="left"> -->
@@ -90,7 +90,7 @@
 
 <script>
 
-import { mapGetters, mapActions } from 'vuex'
+// import { mapGetters, mapActions } from 'vuex'
 import { openURL } from 'quasar'
 
 export default {
@@ -102,36 +102,36 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      loggedIn: 'loggedIn',
-      accessToken: 'accessToken',
-      refreshToken: 'refreshToken'
-    })
+    // ...mapGetters({
+    //   loggedIn: 'loggedIn',
+    //   accessToken: 'accessToken',
+    //   refreshToken: 'refreshToken'
+    // })
   },
   methods: {
-    ...mapActions('auth', [
-      'logout', ''
-    ]),
+    // ...mapActions('auth', [
+    //   'logout', ''
+    // ]),
     launch (url) {
       openURL(url)
-    },
-    onLogout: function () {
-      console.log('onLogout')
-      let self = this
-      this.$store.dispatch('logout', {
-        accessToken: this.$store.getters.accessToken,
-        refreshToken: this.$store.getters.refreshToken,
-        router: self.$router
-      })
-    },
-    onSecretAccess: function () {
-      let self = this
-      this.$store.dispatch('secretAccess', {
-        accessToken: this.$store.getters.accessToken,
-        refreshToken: this.$store.getters.refreshToken,
-        router: self.$router
-      })
     }
+    // onLogout: function () {
+    //   console.log('onLogout')
+    //   let self = this
+    //   this.$store.dispatch('logout', {
+    //     accessToken: this.$store.getters.accessToken,
+    //     refreshToken: this.$store.getters.refreshToken,
+    //     router: self.$router
+    //   })
+    // },
+    // onSecretAccess: function () {
+    //   let self = this
+    //   this.$store.dispatch('secretAccess', {
+    //     accessToken: this.$store.getters.accessToken,
+    //     refreshToken: this.$store.getters.refreshToken,
+    //     router: self.$router
+    //   })
+    // }
   }
 }
 </script>

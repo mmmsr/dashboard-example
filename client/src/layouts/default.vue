@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <q-layout view="lHh Lpr lFf">
     <q-layout-header>
       <q-toolbar
@@ -79,4 +79,4 @@ export default {
 </script>
 
 <style>
-</style>
+</style> -->
