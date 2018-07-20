@@ -45,7 +45,10 @@
         <q-item-side icon="search" />
         <q-item-main label="Search Examples" />
       </q-item>
-
+      <q-item to="random-shift-generator">
+        <q-item-side icon="date_range" />
+        <q-item-main label="Random Shift Generator" />
+      </q-item>
       <q-item @click.native="launch('https://github.com/mmmsr/dashboard-example')">
         <q-item-side icon="ion-logo-github" />
         <q-item-main label="Source Code" />
