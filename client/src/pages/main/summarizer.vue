@@ -15,55 +15,38 @@
       style="max-width: 800px"
       >
       <q-card-title>
-        ランダム振り分け対象者名を入力
+        Input text
         <!-- <span slot="subtitle">Basic horizontal bar chart</span> -->
       </q-card-title>
       <q-card-main>
         <!-- With floating label -->
-        <q-chips-input
-          v-model="members"
-          float-label="Imput members here"
-          add-icon="checked" />
-      </q-card-main>
-
-      <q-card-title>
-        振り分け対象日の初日を入力
-        <!-- <span slot="subtitle">Basic horizontal bar chart</span> -->
-      </q-card-title>
-      <q-card-main>
-        <!-- Only Date -->
-        <q-datetime
-          modal
-          v-model="startDate"
-          type="date"
-          @change="initColumns()" />
-      </q-card-main>
-      <q-card-main>
+        <q-input
+          v-model="originalText"
+          type="textarea"
+          float-label="Original Text"
+          :max-height="100"
+          rows="7"
+        />
         <q-btn
-          @click="randomAssign()"
+          @click="summarize()"
           color="primary">
-          振り分け実施
+          summarize
         </q-btn>
       </q-card-main>
 
       <q-card-title>
-        振り分け結果
+        要約結果
         <!-- <span slot="subtitle">Stacked bar chart</span> -->
       </q-card-title>
 
       <q-card-main>
         <!-- title="Week 1" -->
-        <q-table
-          :columns="week1Columns"
-          :data="week1Data"
-          row-key="name"
-          hide-bottom
-        />
-        <q-table
-          :columns="week2Columns"
-          :data="week2Data"
-          row-key="name"
-          hide-bottom
+        <q-input
+          v-model="summarizedText"
+          type="textarea"
+          float-label="Summarized Text"
+          :max-height="100"
+          rows="7"
         />
       </q-card-main>
     </q-card>
@@ -71,22 +54,14 @@
 </template>
 
 <script>
-import { date } from 'quasar'
-
-const JPN_DAYS = {
-  0: '日',
-  1: '月',
-  2: '火',
-  3: '水',
-  4: '木',
-  5: '金',
-  6: '土'
-}
+// import { date } from 'quasar'
+import axios from 'axios'
 
 export default {
   data () {
     return {
-      members: [],
+      originalText: '',
+      summarizedText: '',
       startDate: null,
       week1Columns: [],
       week2Columns: [],
@@ -95,52 +70,62 @@ export default {
     }
   },
   methods: {
-    saveMembers () {
-      this.$q.localStorage.set('members', this.members)
-    },
-    loadMembers () {
-      if (this.$q.localStorage.get.item('members')) {
-        this.members = this.$q.localStorage.get.item('members')
-      }
-    },
-    initDate () {
-      if (this.startDate === null) {
-        this.startDate = new Date()
-      }
-    },
-    initColumns () {
-      this.week1Columns = []
-      this.week2Columns = []
-      let tmpDate = this.startDate
-      let i = 0
-      let tbl1row1 = {}
-      let tbl1row2 = {}
-      let tbl2row1 = {}
-      let tbl2row2 = {}
-      while (i < 14) {
-        if (tmpDate.getDay() === 0 || tmpDate.getDay() === 6) {
-          // console.log('not business date')
+    summarize: function () {
+      let data = new FormData()
+      this.isLoading = true
+      this.hasResult = false
+      this.fetchResult(data, this.originalText).then((data) => {
+        this.summarizedText = []
+        if (data) {
+          data = JSON.parse(data)
+          console.log(data)
+          console.log(data.summary)
+          console.log(data['summary'])
+          this.hasResult = true
         } else {
-          let column = {
-            name: `date${i}`,
-            label: `${date.formatDate(tmpDate, 'MM/DD')}(${JPN_DAYS[tmpDate.getDay()]})`,
-            align: 'left',
-            field: `date${i}`,
-            sortable: false
-          }
-          if (i < 7) {
-            this.week1Columns.push(column)
-          } else {
-            this.week2Columns.push(column)
+          // console.log('no result')
+          this.hasResult = false
+        }
+        this.summarizedText = data.summary.join('\n')
+        // this.summarizedText = data.summary.join('-')
+        this.isLoading = false
+      })
+    },
+    fetchResult: function (data, originalText) {
+      // const url = `${process.env.SUMMPY_API_URL}/summarize?sent_limit=3&text=test`
+      const url = `${process.env.SUMMPY_API_URL}/api/test`
+      let formdata = {
+        originalText: encodeURI(originalText)
+      }
+      console.log(encodeURI(originalText))
+      let formJson = JSON.stringify(formdata)
+      data.append('form_json', formJson)
+      // return axios.get(
+      return axios.post(
+        url,
+        data,
+        {
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, PUT, POST, DELETE, OPTIONS'
           }
         }
-        tmpDate = date.addToDate(tmpDate, { days: 1 })
-        i++
-      }
-      this.week1Data[0] = tbl1row1
-      this.week1Data[1] = tbl1row2
-      this.week2Data[0] = tbl2row1
-      this.week2Data[1] = tbl2row2
+      ).then(
+        response => response.data
+      ).catch(
+        error => {
+          console.log(error)
+          this.$q.notify({
+            icon: 'warning',
+            color: 'negative',
+            message: `Server not running`,
+            detail: 'Please contact developer',
+            position: 'top-right' // 'top', 'left', 'bottom-left' etc
+          })
+        }
+      )
     },
     randomAssign () {
       if (this.members.length === 0) {
@@ -205,9 +190,6 @@ export default {
     }
   },
   created () {
-    this.loadMembers()
-    this.initDate()
-    this.initColumns()
   }
   // name: 'PageIndex'
 }
