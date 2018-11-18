@@ -41,13 +41,15 @@ module.exports = function (ctx) {
       },
       env: ctx.dev //開発環境/本番環境で設定を変える
       ? { // so on dev we'll have
-        SUMMPY_API_URL: JSON.stringify('https://summpy-test-mmmsr.c9users.io:8080'),
+        // SUMY_API_URL: JSON.stringify('https://text-summrizer-test1.herokuapp.com'),
+        SUMY_API_URL: JSON.stringify('https://sumy-test2-mmmsr.c9users.io:8080'),
         ES_API_URL: JSON.stringify('https://elasticsearch-test2-mmmsr.c9users.io:8080')
         // API_URL: JSON.stringify('some api url here')
       }
       : { // and on build (production):
         // API_URL: JSON.stringify('some api url here')
-        SUMMPY_API_URL: JSON.stringify('https://summpy-test-mmmsr.c9users.io:8080'),
+        SUMY_API_URL: JSON.stringify('https://text-summrizer-test1.herokuapp.com'),
+        // SUMY_API_URL: JSON.stringify('https://sumy-test-mmmsr.c9users.io:8080'),
         ES_API_URL: JSON.stringify('https://elasticsearch-test2-mmmsr.c9users.io:8080')
       }
     },

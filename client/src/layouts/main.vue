@@ -45,6 +45,10 @@
         <q-item-side icon="search" />
         <q-item-main label="Search Examples" />
       </q-item>
+      <q-item to="summarizer">
+        <q-item-side icon="short_text" />
+        <q-item-main label="Text Summarizer" />
+      </q-item>
       <q-item to="random-shift-generator">
         <q-item-side icon="date_range" />
         <q-item-main label="Random Shift Generator" />
